@@ -8,7 +8,6 @@
 #' @param city An optional character string specifying the city name
 #' @param state An optional character string specifying the state name (abbreviated length 2)
 #' @param zipcode An optional character or numeric string of length 5 specifying the zip code
-#' @param rentzestimate if \code{TRUE}, gets the rent zestimate.
 #' @param api_key (required) A unique character string specifying the Zillow user's API key
 #' @param raw (optional) If \code{TRUE}, the raw xml document from the API call is returned. If \code{FALSE}, the data is extracted and formatted into a data frame.
 #' @export
@@ -36,7 +35,7 @@
 #'
 
 
-GetDeepSearchResults <- function(address, city=NULL, state=NULL, zipcode=NULL, rentzestimate=F, api_key, raw=F){
+GetDeepSearchResults <- function(address, city=NULL, state=NULL, zipcode=NULL, api_key){
   assertthat::assert_that(is.character(address),
                           (!is.null(zipcode)|(!is.null(city)&(!is.null(state)))),
                           msg='Error: Invalid address/city/zip combo')
@@ -52,26 +51,17 @@ GetDeepSearchResults <- function(address, city=NULL, state=NULL, zipcode=NULL, r
   request <- url_encode_request(url,
       'address' = address,
       'citystatezip' = citystatezip,
-      'rentzestimate' = rentzestimate,
+      'rentzestimate' = TRUE,
       'zws-id' = api_key
   )
 
   #read data from API then get to the nodes
   xmlresult <- read_xml(request)
-  #if(raw==T) return(xmlresult)
+
   xmlresult<- xmlresult%>% xml_nodes('result')
 
 
-  #check to make sure address worked
-  # %>% html_text() %>% length()
-
   if(length(xmlresult) == 0){
-    #warning('invalid address, NAs returned')
-    #fail<-c(address,zipcode,city,state)
-    # fill<-rep("NA",27)
-    # outdf<-c(fail,fill)
-    # fieldNames<-c("address","zipcode","city","state","lat","long","region_name","region_id","type","zestimate","zest_lastupdated","zest_monthlychange","zest_percentile","zestimate_low","zestimate_high","rentzestimate","rent_lastupdated","rent_monthlychange","rentzestimate_low","rentzestimate_high","zpid","bathrooms","bedrooms","finishedSqFt","lastSoldDate","lastSoldPrice","lotSizeSqFt","taxAssessment","taxAssessmentYear","totalRooms","yearBuilt")
-    # names(outdf)<-fieldNames
 
     return(0)
 
@@ -93,19 +83,15 @@ GetDeepSearchResults <- function(address, city=NULL, state=NULL, zipcode=NULL, r
 
     #rentzestimate data
     rent_zestimate_data <- NULL
-    if(rentzestimate==T){
-      rent_zestimate_data <- xmlresult %>% lapply(extract_rent_zestimates) %>% lapply(as.data.frame.list)
-      rent_zestimate_data <- suppressWarnings(bind_rows(rent_zestimate_data))
 
-      #combine all of the data into 1 data frame
-      outdf <- data.frame(address_data,zestimate_data,rent_zestimate_data,richprop)
-    }
+    rent_zestimate_data <- xmlresult %>% lapply(extract_rent_zestimates) %>% lapply(as.data.frame.list)
+    rent_zestimate_data <- suppressWarnings(bind_rows(rent_zestimate_data))
+
+    #combine all of the data into 1 data frame
+    outdf <- data.frame(address_data,zestimate_data,rent_zestimate_data,richprop)
+
     return(outdf)
-    #return the dataframe
-    # return(outdf %>%
-    #          mutate_at(outdf1:4, as.character) %>%
-    #          mutate_at('zpid', as.character) %>%
-    #          mutate_if(is.factor, as.character))
+
   }
 
 }

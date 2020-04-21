@@ -83,8 +83,7 @@ for(i in 1:nrow(properties)){
                 city    = city,
                 state   = state,
                 zipcode = zipcode,
-                rentzestimate = TRUE,
-                api_key       = keys[keycounter]
+                api_key = keys[keycounter]
             ) 
            
              # 4.3 increment | reset api key ----
