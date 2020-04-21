@@ -6,7 +6,7 @@ realEstAnalytics
 <!-- badges: start -->
 [![Travis build status](https://travis-ci.org/xiyuansun/realEstAnalytics.svg?branch=master)](https://travis-ci.org/xiyuansun/realEstAnalytics) [![Codecov test coverage](https://codecov.io/gh/xiyuansun/realEstAnalytics/branch/master/graph/badge.svg)](https://codecov.io/gh/xiyuansun/realEstAnalytics?branch=master) <!-- badges: end -->
 
-The goal of realEstAnalytics is to provide an R function for each zillow API service, making it easy to make API calls and process the responses into R-friendly data structures.
+The goal of this package is to provide an R function for each zillow API service, making it easy to make API calls and process the responses into R-friendly data structures.
 
 Website
 -------
