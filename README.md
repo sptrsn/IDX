@@ -12,25 +12,15 @@ How To
 ------------
 
 You can install the released version of IDX from [Github](https://github.com) with:
-
 ``` r
-
-# Zillow API Key: https://www.zillow.com/howto/api/APIOverview.htm
-
 
 # 0.1 Install ----
 library(devtools)
 devtools::install_github("sptrsn/IDXSptrsn",force = TRUE)
+```
 
-### REMOVE #################################################################
 
-# detach("package:IDX", unload=TRUE)
-
-# install.packages("C:\\Users\\Second Avenue\\Documents\\IDX", 
-#    repos = NULL, 
-#    type = "source")
-
-############################################################################
+```r
 
 # 1.0 LIBRARIES ----
 library(IDX)
@@ -146,8 +136,9 @@ if(nrow(failed) == 0){
 
 # 7.0 End ----
 
-#fieldNames<-c("address","zipcode","city","state","lat","long","region_name","region_id","type","zestimate","zest_lastupdated","zest_monthlychange","zest_percentile","zestimate_low","zestimate_high","rentzestimate","rent_lastupdated","rent_monthlychange","rentzestimate_low","rentzestimate_high","zpid","bathrooms","bedrooms","finishedSqFt","lastSoldDate","lastSoldPrice","lotSizeSqFt","taxAssessment","taxAssessmentYear","totalRooms","yearBuilt")
+# Fields returned by getDeepSearchResults
 
+#fieldNames<-c("address","zipcode","city","state","lat","long","region_name","region_id","type","zestimate","zest_lastupdated","zest_monthlychange","zest_percentile","zestimate_low","zestimate_high","rentzestimate","rent_lastupdated","rent_monthlychange","rentzestimate_low","rentzestimate_high","zpid","bathrooms","bedrooms","finishedSqFt","lastSoldDate","lastSoldPrice","lotSizeSqFt","taxAssessment","taxAssessmentYear","totalRooms","yearBuilt")
 
 
 
