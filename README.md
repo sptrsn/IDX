@@ -8,17 +8,18 @@ as of 4/21/2020, the getDeepSearchResults has been optimized to loop through fet
 An array of Zillow API keys are rolled on each call. 
 Failures are stored in as separate data frame. Basic.
 
-How To
+Install
 ------------
 
-You can install the released version of IDX from [Github](https://github.com) with:
 ``` r
 
 # 0.1 Install ----
 library(devtools)
-devtools::install_github("sptrsn/IDXSptrsn",force = TRUE)
+devtools::install_github("sptrsn/IDX",force = TRUE)
 ```
 
+How To
+----------
 
 ```r
 
@@ -57,7 +58,7 @@ keys <- c(
 # 3.0 Fetch properties ---- 
 properties <- read.csv("~/rStudio/zillowtape.csv",header=TRUE)
 
-# 3.1 create containers for Zillow & error data ----
+# 3.1 create empty containers for Zillow & error data ----
 zillowData = data.frame()
 failed = data.frame()
 
@@ -70,7 +71,7 @@ for(i in 1:nrow(properties)){
     tryCatch(
         {
                 
-            # 4.1 Modify col numbers (2,3,4,5) to correspond to address, city, state & zip ----
+            # 4.1 Modify col (2,3,4,5) to match address, city, state & zip in your data ----
             address <-as.character(properties[i,2])
             city    <-as.character(properties[i,3])
             state   <-as.character(properties[i,4])
@@ -99,16 +100,17 @@ for(i in 1:nrow(properties)){
                 failed <- rbind(failed,fail)
                 
                 next
+                
             }else{
                 
                 row<-response
             }
             
-            # apend zillow response to the final zillowData container
+            # apend zillow response to the zillowData container
             zillowData <- rbind(zillowData,row)
         },
         error=function(e){
-            cat("ERROR :",conditionMessage(e), "\n")
+            print("ERROR :",conditionMessage(e), "\n")
         }
     )
     
@@ -143,6 +145,10 @@ if(nrow(failed) == 0){
 
 
 ```
+Original Source
+------
+This is a fork from https://github.com/xiyuansun/realEstAnalytics
+
 
 Zillow
 -------
