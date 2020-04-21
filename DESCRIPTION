@@ -1,0 +1,26 @@
+Package: IDX
+Type: Package
+Title: IDX Real Estate
+Version: 0.1.0
+Authors@R: as.person(c(
+    "Steve Peterson <sptrsn@gmail.com> [aut, cre]"
+  ))
+Maintainer: Steve Peterson <sptrsn@gmail.com>
+Description: 
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
+URL: https://www.bluesquidx.com
+Depends: R (>= 2.10)
+Imports: lubridate , assertthat , xml2, RCurl, XML, rvest, dplyr, tidyr, readr, stringr, magrittr, tibble, utils, methods, shiny
+Suggests: 
+    testthat,
+    knitr,
+    rmarkdown,
+    covr,
+    tidyverse,
+    purrr,
+    zoo,
+    reshape2
+RoxygenNote: 6.1.1.9000
+VignetteBuilder: knitr
