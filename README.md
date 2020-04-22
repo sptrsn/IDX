@@ -51,8 +51,8 @@ library(dplyr)
 
 # 2.0 Zillow API Keys ----
 keys <- c(
-    'X1-ZWz1fvtg2hum8b_9zlkj',
-    'X1-ZWz1bw4isfzuob_8uv2u'
+    'onekey',
+    'twokey'
     )
 
 # 3.0 Fetch properties ---- 
