@@ -48,6 +48,8 @@ library(lubridate)
 library(leaflet)
 library(plotly)
 library(dplyr)
+library(rvest)
+library(sp)
 
 # 2.0 Zillow API Keys ----
 keys <- c(
@@ -77,6 +79,8 @@ for(i in 1:nrow(properties)){
             state   <-as.character(properties[i,4])
             zipcode <-properties[i,5]
             
+            current<-c(address,zipcode,city,state)
+            
             # 4.2 call zillow api for property i ----
             response <- GetDeepSearchResults(
                 address = address, 
@@ -95,8 +99,12 @@ for(i in 1:nrow(properties)){
             
             if(length(response)==1){
                 
-                fail<-c(address,zipcode,city,state)
-                failed <- rbind(failed,fail)
+                print('bad###')
+                print(address)
+                print("__________________")    
+                
+                df <- data.frame(matrix(unlist(current), nrow=1, byrow=T),stringsAsFactors=FALSE)
+                failed <- rbind(failed,df)
                 
                 next
                 
@@ -127,7 +135,7 @@ if(nrow(failed) == 0){
     
 }else{
     
-    print("Failed properties being displayed")
+    #print("Failed properties being displayed")
     fieldNames<-c("address","zipcode","city","state")
     names(failed)<-fieldNames
     View(failed)
