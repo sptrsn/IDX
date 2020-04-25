@@ -54,12 +54,10 @@ GetDeepSearchResults <- function(address, city=NULL, state=NULL, zipcode=NULL, a
       'rentzestimate' = TRUE,
       'zws-id' = api_key
   )
-
   #read data from API then get to the nodes
   xmlresult <- read_xml(request)
 
   xmlresult<- xmlresult%>% xml_nodes('result')
-
 
   if(length(xmlresult) == 0){
 
@@ -71,23 +69,23 @@ GetDeepSearchResults <- function(address, city=NULL, state=NULL, zipcode=NULL, a
     address_data <- xmlresult %>% lapply(extract_address_search) %>%  lapply(as.data.frame.list)
     address_data <- suppressWarnings(bind_rows(address_data))
 
-    #zestimate data
+    # #zestimate data
     zestimate_data <- xmlresult %>% lapply(extract_zestimates) %>% lapply(as.data.frame.list)
     zestimate_data <- suppressWarnings(bind_rows(zestimate_data))
-
-    #other property data
+    #
+    # #other property data
     richprop <- xmlresult %>% extract_otherdata_search
-
-    #combine all of the data into 1 data frame
+    #
+    # #combine all of the data into 1 data frame
     outdf <- data.frame(address_data,zestimate_data,richprop)
-
-    #rentzestimate data
+    #
+    # #rentzestimate data
     rent_zestimate_data <- NULL
-
+    #
     rent_zestimate_data <- xmlresult %>% lapply(extract_rent_zestimates) %>% lapply(as.data.frame.list)
     rent_zestimate_data <- suppressWarnings(bind_rows(rent_zestimate_data))
-
-    #combine all of the data into 1 data frame
+    #
+    # #combine all of the data into 1 data frame
     outdf <- data.frame(address_data,zestimate_data,rent_zestimate_data,richprop)
 
     return(outdf)

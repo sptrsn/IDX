@@ -14,6 +14,11 @@ extract_address_search <- function(xmlres){
   region_data <- xmlres %>% xml_nodes('localRealEstate') %>% xml_children() %>%  xml_attrs() %>%
     unlist() %>% as.character() %>% matrix(nrow=rcount, byrow=T) %>% data.frame()
 
+  if(ncol(region_data)==0){
+    levels(region_data) <- c(levels(region_data), "NA")
+    region_data<-list("NA","NA","NA")
+    toString(region_data)
+  }
   names(region_data) <- c('region_name','region_id','type')
   return(data.frame(address_data,region_data))
 }
