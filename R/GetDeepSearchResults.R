@@ -35,7 +35,7 @@
 #'
 
 
-GetDeepSearchResults <- function(address, city=NULL, state=NULL, zipcode=NULL, api_key){
+GetDeepSearchResults <- function(address, city=NULL, state=NULL, zipcode=NULL, api_key,raw=FALSE){
   assertthat::assert_that(is.character(address),
                           (!is.null(zipcode)|(!is.null(city)&(!is.null(state)))),
                           msg='Error: Invalid address/city/zip combo')
@@ -56,8 +56,11 @@ GetDeepSearchResults <- function(address, city=NULL, state=NULL, zipcode=NULL, a
   )
   #read data from API then get to the nodes
   xmlresult <- read_xml(request)
-
-  xmlresult<- xmlresult%>% xml_nodes('result')
+  if(raw==TRUE){
+   return(xmlresult)
+  }
+  xmlresult<- xmlresult %>%
+    xml_nodes('result')
 
   if(length(xmlresult) == 0){
 
@@ -65,28 +68,56 @@ GetDeepSearchResults <- function(address, city=NULL, state=NULL, zipcode=NULL, a
 
   }else{
 
-    #address data
+    # # address data
     address_data <- xmlresult %>% lapply(extract_address_search) %>%  lapply(as.data.frame.list)
-    address_data <- suppressWarnings(bind_rows(address_data))
+    address_data<-data.frame(address_data)
+    addnames<-c("address","zipcode","city","state","lat","long","region_name","region_id","type")
+    address_data<-address_data[,addnames]
 
-    # #zestimate data
-    zestimate_data <- xmlresult %>% lapply(extract_zestimates) %>% lapply(as.data.frame.list)
-    zestimate_data <- suppressWarnings(bind_rows(zestimate_data))
-    #
-    # #other property data
+    #return(address_data)
+
+    # # other property data
     richprop <- xmlresult %>% extract_otherdata_search
-    #
-    # #combine all of the data into 1 data frame
-    outdf <- data.frame(address_data,zestimate_data,richprop)
-    #
-    # #rentzestimate data
-    rent_zestimate_data <- NULL
-    #
+
+    if(nrow(richprop)>1){
+      richprop<-richprop %>% filter(str_length(zpid)==9 & is.numeric(zpid))
+    }
+    if(nrow(richprop)==0){
+      richprop[1,] <- NA
+    }
+    #return(data.frame(richprop))
+
+    # # zestimate data
+    zestimate_data <- xmlresult %>% lapply(extract_zestimates) %>% lapply(as.data.frame.list)
+    zdf<-data.frame(zestimate_data)
+    if(nrow(zdf)==0){
+      zdf[1,] <- NA
+    }
+    zestcolselect<-c("zestimate","zest_lastupdated","zest_monthlychange","zest_percentile","zestimate_low","zestimate_high")
+    zestimate_data<-zdf[, zestcolselect]
+
+    # # rentzestimate data
     rent_zestimate_data <- xmlresult %>% lapply(extract_rent_zestimates) %>% lapply(as.data.frame.list)
-    rent_zestimate_data <- suppressWarnings(bind_rows(rent_zestimate_data))
-    #
-    # #combine all of the data into 1 data frame
-    outdf <- data.frame(address_data,zestimate_data,rent_zestimate_data,richprop)
+
+    if(length(rent_zestimate_data)>1){
+      rent_zestimate_data<-rent_zestimate_data[1]
+    }
+    rentdf<-data.frame(rent_zestimate_data)
+
+    use<-c("rentzestimate","rent_lastupdated","rent_monthlychange","rentzestimate_low","rentzestimate_high")
+
+    rentdf<-rentdf[, use]
+
+    if(nrow(rentdf)==0){
+
+
+
+      rentdf[1,] <- data.frame(list(NA,NA,NA,NA,NA))
+
+    }
+
+    # # combine all of the data into 1 data frame
+    outdf <- data.frame(address_data,richprop,zestimate_data,rentdf)
 
     return(outdf)
 
@@ -95,5 +126,8 @@ GetDeepSearchResults <- function(address, city=NULL, state=NULL, zipcode=NULL, a
 }
 
 
+#address_data <- suppressWarnings(bind_rows(address_data))
+#zestimate_data <- suppressWarnings(bind_rows(zestimate_data))
+#rent_zestimate_data <- suppressWarnings(bind_rows(rent_zestimate_data))
 
 
