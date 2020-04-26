@@ -100,8 +100,7 @@ for(i in 1:nrow(properties)){
                 api_key = keys[keycounter],
                 raw = FALSE
             ) 
-            k<-c("used key: ",keys[keycounter])
-            print(k)
+            
             # 4.3 increment | reset api key ----
             if(keycounter == length(keys)){ 
                 keycounter <- 1
