@@ -11,7 +11,7 @@ output: html_notebook
 
 # 0.1 Install ----
 #library(devtools)
-#devtools::install_github("sptrsn/IDXSptrsn",force = TRUE)
+#devtools::install_github("sptrsn/IDX",force = TRUE)
 
 # clear environment variables
 rm(list=ls())
