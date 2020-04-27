@@ -9,7 +9,6 @@
 #' @param state An optional character string specifying the state name (abbreviated length 2)
 #' @param zipcode An optional character or numeric string of length 5 specifying the zip code
 #' @param api_key (required) A unique character string specifying the Zillow user's API key
-#' @param raw (optional) If \code{TRUE}, the raw xml document from the API call is returned. If \code{FALSE}, the data is extracted and formatted into a data frame.
 #' @export
 #' @importFrom rvest html_text
 #' @importFrom assertthat assert_that
@@ -37,7 +36,7 @@
 
 
 
-GetDeepSearchResults <- function(address, city=NULL, state=NULL, zipcode=NULL, api_key,raw=FALSE){
+GetDeepSearchResults <- function(address, city=NULL, state=NULL, zipcode=NULL, api_key=null,raw=FALSE){
   assertthat::assert_that(is.character(address),
                           (!is.null(zipcode)|(!is.null(city)&(!is.null(state)))),
                           msg='Error: Invalid address/city/zip combo')
