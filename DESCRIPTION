@@ -1,7 +1,7 @@
 Package: IDX
 Type: Package
 Title: IDX Real Estate
-Version: 0.1.0
+Version: 0.1.1
 Authors@R: as.person(c(
     "Steve Peterson <sptrsn@gmail.com> [aut, cre]"
   ))
