@@ -35,9 +35,7 @@
 #'
 
 
-GetDeepSearchResultsVersion<-function(){
-  return('20200246 19:00')
-}
+
 
 GetDeepSearchResults <- function(address, city=NULL, state=NULL, zipcode=NULL, api_key,raw=FALSE){
   assertthat::assert_that(is.character(address),
